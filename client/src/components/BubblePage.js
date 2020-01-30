@@ -21,6 +21,8 @@ const BubblePage = () => {
       })
   }, [])
 
+  console.log(colorList);
+
   return (
     <div>
       <h1>Bubble Page</h1>
