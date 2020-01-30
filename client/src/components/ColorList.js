@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
-import {BrowserRouter as Router, useParams} from 'react-router-dom';
 import { axiosWithAuth } from "../utils/axiosWithAuth";
 
 const initialColor = {
@@ -19,7 +17,7 @@ const ColorList = ({ colors, updateColors }) => {
     setColorToEdit(color);
   };
 
-  const saveEdit = (e) => {
+  const saveEdit = e => {
     e.preventDefault();
     axiosWithAuth()
       .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
@@ -35,8 +33,18 @@ const ColorList = ({ colors, updateColors }) => {
       });
   };
 
-  const deleteColor = color => {
-    // make a delete request to delete this color
+  const deleteColor = (color) => {
+    axiosWithAuth()
+      .delete(`http://localhost:5000/api/colors/${color.id}`)
+      .then(() => {
+        axiosWithAuth()
+          .get('http://localhost:5000/api/colors')
+          .then(response => updateColors(response.data))
+          .catch(error => {
+            console.log(error)
+          })
+          setEditing(false);
+      })
   };
 
   return (
